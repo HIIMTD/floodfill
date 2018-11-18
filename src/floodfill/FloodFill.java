@@ -136,11 +136,8 @@ public class FloodFill {
 
 				array[location.x][i] = 1;
 
-				
-
-			}
-
 			
+			}
 
 			//scan right
 
@@ -159,9 +156,6 @@ public class FloodFill {
 			}
 
 
-
-			
-
 			Location nextLocation = new Location(location.x+1, location.y);
 
 			if (toFill(nextLocation)) {
@@ -170,8 +164,7 @@ public class FloodFill {
 
 			}
 
-			
-
+		
 			nextLocation = new Location(location.x-1, location.y);
 
 			if (toFill(nextLocation)) {
@@ -184,7 +177,6 @@ public class FloodFill {
 
 	}
 
-	
 
 	public void fillUsingQueue() {
 
@@ -267,25 +259,9 @@ public class FloodFill {
 	public void fillUsingRecursion(int color, int label, Location location) {
 
 
-
-//		System.out.println("testing: (" + x + ", " + y + ")" );
-
-//		if (!toFill(x, y)) {
-
-//			return;
-
-//		}
-
-		
-
-//		System.out.println("filling: (" + x + ", " + y + ")" );
-
-
-
 		array[location.x][location.y] = 1;
 
-			
-
+		
 		Location nextLocation = new Location(location.x+1, location.y);
 
 		if (toFill(nextLocation)) {
@@ -324,12 +300,9 @@ public class FloodFill {
 
 		}
 
-
-
 	}
 
 	
-
 	public void resetArray() {
 
 		for (int i = 0; i < numRows; i++) {
@@ -345,7 +318,6 @@ public class FloodFill {
 	}
 
 	
-
 	public void printArray() {
 
 		for (int i = 0; i < numRows; i++) {
@@ -365,22 +337,6 @@ public class FloodFill {
 	}
 
 	
-
-	public void queue() {
-
-		
-
-	}
-
-	
-
-	public void scanLine() {
-
-		
-
-	}
-
-
 
 	public static int[][] initArray(int rows, int cols) {
 
@@ -406,23 +362,25 @@ public class FloodFill {
 
 		int columns = 100;
 
-		double rMin = ((double) columns)/60;
+		double rMin = ((double) columns)/20;
 
 		double rMax = rMin*3;
 
-		
-
 		Random random = new Random();
 
+		long timeMethodRecursion = 0;
 
+		long timeMethodQueue = 0;
 
-		long timeMethod1 = 0;
+		long timeMethodScanline = 0;
 
-		long timeMethod2 = 0;
-
-		long timeMethod3 = 0;
-
-
+		long totalTimeRecursion = 0;
+		long totalTimeQueue = 0;
+		long totalTimeScanline = 0;
+		double totalRegionalSize = 0;
+		long totoalMemoryRecursion =0;
+		long totoalMemoryQueue =0;
+		long totoalMemoryScaneline =0;
 
 		for (int i = 0; i < 3; i++) {
 
@@ -434,114 +392,145 @@ public class FloodFill {
 
 			int t = random.nextInt(columns);
 
-			
-
 			double r = rMin + (rMax - rMin) * random.nextDouble();
-
-			
 
 			double regionalSize = Math.PI * r * r;
 
-			
 
 			FloodFill ff = new FloodFill(array, new Location(s, t), r);
 
+//#####################################################################
+			System.out.println();
+			System.out.println("using recursion");
+
+		    long usedMemoryBeforeR = Runtime.getRuntime().freeMemory();
+
+		    System.out.println("Used Memory before " + usedMemoryBeforeR);
+
+			long startTimeR = System.nanoTime();
+
+//			System.out.println("time1: " + System.nanoTime());
+
+			ff.fillUsingRecursion();
 			
+			long endtTimeR = System.nanoTime();
+			timeMethodRecursion = endtTimeR - startTimeR;
+//			System.out.println("time2: " + timeMethodRecursion);
+
+			long usedmemoryAfterR = Runtime.getRuntime().totalMemory();
+			 System.out.println("used Memory after " + usedmemoryAfterR);
+
+		    long memoryUsedR = usedmemoryAfterR - usedMemoryBeforeR;
+
+		    System.out.println("Memory used " + memoryUsedR);
 
 //			ff.printArray();
 
-			
-
-			System.out.println("using recursion");
-
-
-
-		    long usedMemoryBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-		    System.out.println("Used Memory before " + usedMemoryBefore);
-
-			
-
-			long startTime = System.nanoTime();
-
-//			System.out.println("time: " + System.nanoTime());
-
-			ff.fillUsingRecursion();
-
-//			System.out.println("time: " + System.nanoTime());
-
-
-
-			timeMethod1 = System.nanoTime() - startTime;
-
-			
-
-	        // working code here
-
-		    long usedMemoryAfter = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-		    System.out.println("Used Memory After " + usedMemoryAfter);
-
-			ff.printArray();
-
-			
-
+  //#####################################################################
+		    System.out.println();
 			System.out.println("using queue");
 
 			ff.resetArray();
+			
+		    long usedMemoryBeforeQ = Runtime.getRuntime().freeMemory();
 
-			startTime = System.nanoTime();
+		    System.out.println("Used Memory before " + usedMemoryBeforeQ);
 
-//			System.out.println("time: " + System.nanoTime());
+			long startTimeQ = System.nanoTime();
+
+//			System.out.println("time1: " + System.nanoTime());
 
 			ff.fillUsingQueue();
-
-//			System.out.println("time: " + System.nanoTime());
-
-
-
-			timeMethod2 = System.nanoTime()- startTime;
-
-			ff.printArray();
-
 			
+			long endTimeQ = System.nanoTime();
 
+			timeMethodQueue = endTimeQ- startTimeQ;
+//			System.out.println("time2: " + timeMethodQueue);
+			
+			long usedmemoryAfterQ = Runtime.getRuntime().totalMemory();
+			 System.out.println("used Memory after " + usedmemoryAfterQ);
+
+		    long memoryUsedQ = usedmemoryAfterQ - usedMemoryBeforeQ;
+
+		    System.out.println("Memory used " + memoryUsedQ);
+
+//			ff.printArray();
+
+//#####################################################################
+		    System.out.println();
 			System.out.println("uisng scanline");
 
 			ff.resetArray();
+			
+		    long usedMemoryBeforeS = Runtime.getRuntime().freeMemory();
 
-			startTime = System.nanoTime();
+		    System.out.println("Used Memory before " + usedMemoryBeforeS);
 
-//			System.out.println("time: " + System.nanoTime());
+			long startTimeS = System.nanoTime();
+//		    System.out.println("time1: " + System.nanoTime());
 
 			ff.fillUsingScanLine();
-
-//			System.out.println("time: " + System.nanoTime());
-
-			timeMethod3 = System.nanoTime() - startTime;
-
-			ff.printArray();
-
 			
+			long endTimeS = System.nanoTime();
+
+			timeMethodScanline = endTimeS - startTimeS;
+//			System.out.println("time2: " + timeMethodScanline);
+			
+			long usedmemoryAfterS = Runtime.getRuntime().totalMemory();
+			System.out.println("used Memory after " + usedmemoryAfterS);
+
+		    long memoryUsedS = usedmemoryAfterS - usedMemoryBeforeS;
+
+		    System.out.println("Memory used " + memoryUsedS);
+
+//			ff.printArray();
+
+			totalTimeRecursion +=timeMethodRecursion;
+			totalTimeQueue += timeMethodQueue;
+			totalTimeScanline +=timeMethodScanline;
+			
+			totalRegionalSize += regionalSize;
+			
+			totoalMemoryRecursion += memoryUsedR;
+			totoalMemoryQueue += memoryUsedQ;
+			totoalMemoryScaneline += memoryUsedS;
+			
+			System.out.println();
 
 			System.out.println("reginal size: " + regionalSize);
 
-			System.out.println("time method 1: " + timeMethod1);
-
-			System.out.println("time method 2: " + timeMethod2);
-
-			System.out.println("time method 3: " + timeMethod3);
+			System.out.println("time method recursion: " + timeMethodRecursion);
+			System.out.println("time method queue: " + timeMethodQueue);
+			System.out.println("time method scanline: " + timeMethodScanline);
+			
+			System.out.println("memory method recursion: " + memoryUsedR);
+			System.out.println("memory method queue: " + memoryUsedQ);
+			System.out.println("memory method scanline: " + memoryUsedS);
+			
+			
+			
+			
+			System.out.println("############################################");
+			System.out.println();
 
 		}
 
-		
+		//prtin out details after loop
+		System.out.println("total region size: " + totalRegionalSize);
+	
+		System.out.println("total time method recursion: " + totalTimeRecursion);
 
-		
+		System.out.println("total time method queue: " + totalTimeQueue);
 
+		System.out.println("total time method scanline: " + totalTimeScanline);
 		
+		System.out.println("total memory recursion: " + totoalMemoryRecursion);
+
+		System.out.println("total memory queue: " + totoalMemoryQueue);
+
+		System.out.println("total memory scanline: " + totoalMemoryScaneline);
+
 
 	}
-
-
 
 }
