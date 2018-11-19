@@ -27,7 +27,10 @@ public class FloodFill {
 		}
 
 	}
-
+	public long counterR;
+	public long counterQ;
+	public long counterS;
+	
 	int numRows;
 
 	int numCols;
@@ -41,6 +44,9 @@ public class FloodFill {
 	boolean[][] plannedMatrix;
 
 	public FloodFill(int[][] array, Location location, double r) {
+		counterR = 0;
+		counterQ = 0;
+	    counterS = 0;
 
 		this.array = array;
 
@@ -159,6 +165,7 @@ public class FloodFill {
 				setPlannedMatrix(nextLocation);
 
 				queue.add(nextLocation);
+				counterS+=1;
 
 			}
 
@@ -169,7 +176,7 @@ public class FloodFill {
 				setPlannedMatrix(nextLocation);
 
 				queue.add(nextLocation);
-
+				counterS+=1;
 			}
 
 		}
@@ -184,16 +191,20 @@ public class FloodFill {
 
 		queue.add(startLocation);
 
+		
+		
+
 		while (!queue.isEmpty()) {
-
+		
 			Location location = queue.remove();
-
+			
 			if (toFill(location)) {
 			 array[location.x][location.y] = 1;
 	         queue.add(new Location(location.x-1, location.y));
 	         queue.add(new Location(location.x+1, location.y));
 	         queue.add(new Location(location.x, location.y-1));
 	         queue.add(new Location(location.x, location.y+1));
+	         counterQ+=4;
 			}
 
 //			if (toFill(nextLocation)) {
@@ -287,7 +298,7 @@ public class FloodFill {
 			fillUsingRecursion(0, 1, nextLocation);
 
 		}
-
+		counterR++;
 	}
 
 	public void resetArray() {
@@ -363,14 +374,15 @@ public class FloodFill {
 		long totalTimeScanline = 0;
 
 		double totalRegionalSize = 0;
-
-		long totoalMemoryRecursion = 0;
-
-		long totoalMemoryQueue = 0;
-
-		long totoalMemoryScaneline = 0;
+//
+//		long totoalMemoryRecursion = 0;
+//
+//		long totoalMemoryQueue = 0;
+//
+//		long totoalMemoryScaneline = 0;
 
 		for (int i = 0; i < 30; i++) {
+
 
 			int[][] array = initArray(rows, columns);
 
@@ -390,7 +402,7 @@ public class FloodFill {
 
 			System.out.println("using recursion");
 
-			long usedMemoryBeforeR = Runtime.getRuntime().freeMemory();
+//			long usedMemoryBeforeR = Runtime.getRuntime().freeMemory();
 
 //			System.out.println("Used Memory before " + usedMemoryBeforeR);
 
@@ -403,14 +415,15 @@ public class FloodFill {
 			long endtTimeR = System.nanoTime();
 
 			timeMethodRecursion = endtTimeR - startTimeR;
+			System.out.print("counterR = " + ff.counterR*16);
 
 //			System.out.println("time2: " + timeMethodRecursion);
 
-			long usedmemoryAfterR = Runtime.getRuntime().totalMemory();
+//			long usedmemoryAfterR = Runtime.getRuntime().totalMemory();
 
 //			System.out.println("used Memory after " + usedmemoryAfterR);
 
-			long memoryUsedR = usedmemoryAfterR - usedMemoryBeforeR;
+//			long memoryUsedR = usedmemoryAfterR - usedMemoryBeforeR;
 
 //			System.out.println("Memory used " + memoryUsedR);
 
@@ -424,7 +437,7 @@ public class FloodFill {
 
 			ff.resetArray();
 
-			long usedMemoryBeforeQ = Runtime.getRuntime().freeMemory();
+//			long usedMemoryBeforeQ = Runtime.getRuntime().freeMemory();
 
 //			System.out.println("Used Memory before " + usedMemoryBeforeQ);
 
@@ -440,11 +453,13 @@ public class FloodFill {
 
 //			System.out.println("time2: " + timeMethodQueue);
 
-			long usedmemoryAfterQ = Runtime.getRuntime().totalMemory();
+//			long usedmemoryAfterQ = Runtime.getRuntime().totalMemory();
 
 //			System.out.println("used Memory after " + usedmemoryAfterQ);
 
-			long memoryUsedQ = usedmemoryAfterQ - usedMemoryBeforeQ;
+//			long memoryUsedQ = usedmemoryAfterQ - usedMemoryBeforeQ;
+			System.out.print("counterQ = " + ff.counterQ/4*3*8);
+
 
 //			System.out.println("Memory used " + memoryUsedQ);
 
@@ -458,7 +473,7 @@ public class FloodFill {
 
 			ff.resetArray();
 
-			long usedMemoryBeforeS = Runtime.getRuntime().freeMemory();
+//			long usedMemoryBeforeS = Runtime.getRuntime().freeMemory();
 
 //			System.out.println("Used Memory before " + usedMemoryBeforeS);
 
@@ -473,11 +488,12 @@ public class FloodFill {
 
 //			System.out.println("time2: " + timeMethodScanline);
 
-			long usedmemoryAfterS = Runtime.getRuntime().totalMemory();
+//			long usedmemoryAfterS = Runtime.getRuntime().totalMemory();
 
 //			System.out.println("used Memory after " + usedmemoryAfterS);
 
-			long memoryUsedS = usedmemoryAfterS - usedMemoryBeforeS;
+//			long memoryUsedS = usedmemoryAfterS - usedMemoryBeforeS;
+			System.out.print("counterS = " + ff.counterS/2*8);
 
 //			System.out.println("Memory used " + memoryUsedS);
 
@@ -491,11 +507,11 @@ public class FloodFill {
 
 			totalRegionalSize += regionalSize;
 
-			totoalMemoryRecursion += memoryUsedR;
-
-			totoalMemoryQueue += memoryUsedQ;
-
-			totoalMemoryScaneline += memoryUsedS;
+//			totoalMemoryRecursion += memoryUsedR;
+//
+//			totoalMemoryQueue += memoryUsedQ;
+//
+//			totoalMemoryScaneline += memoryUsedS;
 
 			System.out.println();
 
@@ -507,11 +523,11 @@ public class FloodFill {
 
 			System.out.println("time method scanline: " + timeMethodScanline);
 
-			System.out.println("memory method recursion: " + memoryUsedR);
-
-			System.out.println("memory method queue: " + memoryUsedQ);
-
-			System.out.println("memory method scanline: " + memoryUsedS);
+//			System.out.println("memory method recursion: " + memoryUsedR);
+//
+//			System.out.println("memory method queue: " + memoryUsedQ);
+//
+//			System.out.println("memory method scanline: " + memoryUsedS);
 
 			System.out.println("############################################");
 
@@ -529,11 +545,12 @@ public class FloodFill {
 
 		System.out.println("total time method scanline: " + totalTimeScanline);
 
-		System.out.println("total memory recursion: " + totoalMemoryRecursion);
+//		System.out.println("total memory recursion: " + totoalMemoryRecursion);
+//
+//		System.out.println("total memory queue: " + totoalMemoryQueue);
+//
+//		System.out.println("total memory scanline: " + totoalMemoryScaneline);
 
-		System.out.println("total memory queue: " + totoalMemoryQueue);
-
-		System.out.println("total memory scanline: " + totoalMemoryScaneline);
 
 	}
 
